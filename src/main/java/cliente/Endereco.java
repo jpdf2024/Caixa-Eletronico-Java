@@ -47,17 +47,42 @@ public class Endereco {
     }
 
     /* Métodos 06.02.26 */
+    //public void cadastra(Scanner tec) {
+    //    /*correcao IA - Copilot 08.02.26 */
+    //    /*Scanner tec = new Scanner(System.in);*/
+    //    System.out.println("Digite a rua");
+    //    rua = tec.nextLine();
+    //    System.out.println("Digite o número");
+    //    numero = tec.nextInt();
+    //    /*correcao IA - Copilot 08.02.26 */
+    //    tec.nextLine(); // consome o Enter
+    //    System.out.println("Digite a cidade");
+    //    cidade = tec.nextLine();
+    //    System.out.println("Digite a uf");
+    //    uf = tec.nextLine();
+    //}
+    
+    /* Métodos 06.02.26 - Atualizado em 24.03.26 */
     public void cadastra(Scanner tec) {
-        /*correcao IA - Copilot 08.02.26 */
-        /*Scanner tec = new Scanner(System.in);*/
         System.out.println("Digite a rua");
         rua = tec.nextLine();
-        System.out.println("Digite o número");
-        numero = tec.nextInt();
-        /*correcao IA - Copilot 08.02.26 */
-        tec.nextLine(); // consome o Enter
+
+        boolean numeroValido = false;
+        while (!numeroValido) {
+            System.out.println("Digite o número");
+            String entrada = tec.nextLine(); // Lemos como String para evitar erro de buffer
+
+            try {
+                numero = Integer.parseInt(entrada); // Tenta converter o texto em número
+                numeroValido = true; // Se chegar aqui, o número é válido e sai do loop
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Digite apenas números inteiros (ex: 123).");
+            }
+        }
+
         System.out.println("Digite a cidade");
         cidade = tec.nextLine();
+
         System.out.println("Digite a uf");
         uf = tec.nextLine();
     }
