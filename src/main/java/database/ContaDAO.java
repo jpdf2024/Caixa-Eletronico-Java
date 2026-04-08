@@ -45,11 +45,16 @@ public class ContaDAO {
                      "FOREIGN KEY (id_titular) REFERENCES titular(id_titular)" +
                      "FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa)" +
                      ");";
+        
+        //inclusão da tabela UF na inicialização do banco 07.04.2026
+        String sql_uf = "CREATE TABLE IF NOT EXISTS 'UF'(ID INTEGER PRIMARY KEY AUTOINCREMENT, UF text, NOME_UF text);";
                 
         try (Connection conn = conectar(); Statement stmt = conn.createStatement()) {
             stmt.execute(sql_titular);
             stmt.execute(sql_empresa);
             stmt.execute(sql_conta);
+            //inclusão da tabela UF na inicialização do banco 07.04.2026
+            stmt.execute(sql_uf);
             System.out.println("Tabelas verificadas/criadas com sucesso!");        
         } catch (SQLException e) {
             System.out.println("Erro ao iniciar banco: " + e.getMessage());
@@ -196,5 +201,29 @@ public class ContaDAO {
         }
         return 1001; // Caso ocorra algum erro, inicia com o padrão
     }
-
+    
+    //método para validar a UF 07.04.2026
+    public static boolean validarUF(String siglaUF) {
+        //SQL conta quantas linhas correspondem à sigla fornecida
+        String sql = "SELECT COUNT(*) FROM UF WHERE sigla = ?";
+        
+        try (Connection conn = conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, siglaUF.toUpperCase()); // Garante que compara em maiúsculas
+        
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                // Se o count for maior que 0, a UF existe
+                return rs.getInt(1) > 0;
+            }
+        }
+        } catch (SQLException e) {
+            System.out.println("Erro na validação da UF: " + e.getMessage());
+        }
+        return false; // Retorna falso se houver erro ou se não encontrar
+    }
+            
 }
+        
+    

@@ -1,6 +1,7 @@
 
 package cliente;
 
+import database.ContaDAO;
 import java.util.Scanner;
 
 /*inclusas atributos da classe, getters and setters 05.02.2026 */
@@ -82,9 +83,21 @@ public class Endereco {
 
         System.out.println("Digite a cidade");
         cidade = tec.nextLine();
-
-        System.out.println("Digite a uf");
-        uf = tec.nextLine();
+        
+         //inclusão de método para validar a UF 07.04.2026
+        String uf;
+            do {
+                System.out.print("Digite a UF (ex: PR): ");
+                uf = tec.nextLine().toUpperCase();
+        
+                if (!ContaDAO.validarUF(uf)) {
+                    System.out.println("UF inválida! Tente novamente.");
+                }       
+            } while (!ContaDAO.validarUF(uf)); // O loop continua enquanto a UF for inválida
+    
+            this.uf = uf;
+        //System.out.println("Digite a uf");
+        //uf = tec.nextLine();
     }
 
 }
