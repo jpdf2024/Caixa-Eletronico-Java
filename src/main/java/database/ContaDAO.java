@@ -205,7 +205,7 @@ public class ContaDAO {
     //método para validar a UF 07.04.2026
     public static boolean validarUF(String siglaUF) {
         //SQL conta quantas linhas correspondem à sigla fornecida
-        String sql = "SELECT COUNT(*) FROM UF WHERE sigla = ?";
+        String sql = "SELECT COUNT(*) FROM UF WHERE UF = ?";
         
         try (Connection conn = conectar();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
