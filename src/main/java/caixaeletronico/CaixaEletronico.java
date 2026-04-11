@@ -5,6 +5,7 @@ import conta.Conta;
 import java.util.Scanner;
 //import java.util.ArrayList;
 import database.ContaDAO;
+import java.io.PrintStream;
 import java.sql.*;
 
 public class CaixaEletronico {
@@ -18,8 +19,16 @@ public class CaixaEletronico {
     // 1. Cria o arquivo e as tabelas se elas não existirem
     ContaDAO.inicializarBanco();
         
+        // Configura o Scanner para ler acentos corretamente 11.04.2026
+        Scanner tec = new Scanner(System.in, "UTF-8");
+        // Configura a saída do console (System.out) para UTF-8
+        //Esta é a melhor forma porque o seu programa não "quebra" se houver um problema com a codificação
+        try {
+            System.setOut(new PrintStream(System.out, true, "UTF-8"));
+            } catch (java.io.UnsupportedEncodingException e) {
+                System.out.println("Erro ao configurar acentuação: " + e.getMessage());
+            }
         
-        Scanner tec = new Scanner(System.in);
         int opcao = 0;
 
         while (opcao != 7) {
