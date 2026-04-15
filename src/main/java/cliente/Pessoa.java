@@ -15,6 +15,7 @@ public abstract class Pessoa {
         nomePessoa = tec.nextLine();
         System.out.println("Digite o telefone");
         telefone = tec.nextLine();
+        //chamar o método para validar o número do telefone
         e.cadastra(tec);
     }
 

@@ -4,6 +4,12 @@ import java.sql.*;
 import conta.Conta;
 import cliente.*;
 
+//adicionado a biblioteca Google libphonenumber
+import java.util.regex.Pattern;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
 public class ContaDAO {
     private static final String URL = "jdbc:sqlite:dados_bancarios.db";
 
@@ -222,6 +228,41 @@ public class ContaDAO {
             System.out.println("Erro na validação da UF: " + e.getMessage());
         }
         return false; // Retorna falso se houver erro ou se não encontrar
+    }
+    
+    
+    public class ValidadorTelefone {
+
+        // Regex para formato internacional E.164
+        private static final Pattern PADRAO_E164 = Pattern.compile("^\\+?[1-9]\\d{1,14}$");
+
+        // Regex para telefones brasileiros (10 ou 11 dígitos)
+        private static final Pattern PADRAO_BRASIL = Pattern.compile("^\\d{10,11}$");
+
+        public static boolean validarTelefone(String numero, String codigoPais) {
+            if (numero == null) return false;
+
+            // Normaliza: remove espaços, hífens e parênteses
+            String normalizado = numero.replaceAll("[\\s\\-()]", "");
+
+            // Primeiro valida formato com regex
+            boolean formatoValido = PADRAO_E164.matcher(normalizado).matches() ||
+                                    PADRAO_BRASIL.matcher(normalizado).matches();
+
+            if (!formatoValido) {
+                return false;
+            }
+
+            // Depois valida semântica com libphonenumber
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+            try {
+                Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(normalizado, codigoPais);
+                return phoneUtil.isValidNumber(phoneNumber);
+            } catch (NumberParseException e) {
+                System.out.println("Erro ao analisar número: " + e.getMessage());
+                return false;
+            }
+        }
     }
             
 }
