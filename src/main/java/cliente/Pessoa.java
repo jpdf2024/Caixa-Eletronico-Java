@@ -1,5 +1,6 @@
 package cliente;
 
+import database.ContaDAO.ValidadorTelefone;
 import java.util.Scanner;
 
 public abstract class Pessoa {
@@ -13,8 +14,25 @@ public abstract class Pessoa {
         /*Scanner tec = new Scanner(System.in);*/
         System.out.println("Digite o nome");
         nomePessoa = tec.nextLine();
-        System.out.println("Digite o telefone");
-        telefone = tec.nextLine();
+       
+        //Atualizado para validar telefone 16.04.26
+        //System.out.println("Digite o telefone");
+        //telefone = tec.nextLine();
+        
+        do {
+            System.out.print("Digite o telefone (com DDD): ");
+            telefone = tec.nextLine();
+
+            // Chamamos o validador. "BR" é o código para o Brasil.
+            if (!ValidadorTelefone.validarTelefone(telefone, "BR")) {
+                System.out.println("Telefone inválido! Use o formato (43) 99999-9999");
+            }
+        } while (!ValidadorTelefone.validarTelefone(telefone, "BR"));
+
+        // Se chegou aqui, o telefone é válido!
+        this.telefone = telefone;
+        
+        
         //chamar o método para validar o número do telefone
         e.cadastra(tec);
     }
